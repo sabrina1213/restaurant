@@ -67,7 +67,7 @@ export default {
               console.log(response.data.err);
               if(response.data.err === false){
                 ctx.$message.success('登录成功了~');
-                router.push('/home');
+                router.push('/home/manageMenu');
                 console.log("success.....");
               }
             });

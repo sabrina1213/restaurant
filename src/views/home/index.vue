@@ -3,7 +3,7 @@
         <el-col :span="3.5">
             <Nav/>
         </el-col>
-        <el-col :span="20">
+        <el-col :span="21">
             <router-view></router-view>
         </el-col>
     </el-row>

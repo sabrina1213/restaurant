@@ -1,7 +1,7 @@
 <template>
   <div>
      <el-menu
-      default-active="2"
+      default-active="/home/manageMenu"
       class="el-menu-vertical-demo menu-box"
       @select="handleSelect">
       <el-menu-item index="/home/manageMenu" >菜单管理</el-menu-item>
