@@ -1,10 +1,11 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const route = require('./route')
-let bodyParser = require('body-parser');
+const route = require('./manager')
+// let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let session = require('cookie-session');
+
 // const session = require('express-session')
 
 app.use(cookieParser('sabrina'));//用于对cookie进行签名，提高安全性
@@ -16,7 +17,11 @@ app.use(session({
 	saveUnitialized:true	//强制未初始化的session保存到数据库
 }))
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ limit:'500mb',extended: true }))
+// parse application/json
+app.use(express.json({limit:'500mb'}))
+
 //设置跨域请求
 app.use("*",function(req,res,next){
 	res.header("Access-Control-Allow-Origin",  req.header("origin"));

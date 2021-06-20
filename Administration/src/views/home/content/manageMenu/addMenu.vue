@@ -5,15 +5,15 @@
       <el-dialog title="新增菜品" v-model="addDialogTableVisible">
         <el-row>
           <el-col :span="12" class="add-Dialog-left">
-            <el-upload
-              class="avatar-uploader"
-              action="http://localhost:3000/manager/addmenu"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-            >
-              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            <div class="add-Dialog-left-box" @click="uploadImage()">
+              <i class="iconfont icon-jia"></i>
+              <input
+                type="file"
+                name="file"
+                accept="image/*"
+                class="input-style"
+              />
+            </div>
           </el-col>
           <el-col :span="12" class="add-Dialog-right">
             <el-form :model="newMenuData">
@@ -38,15 +38,34 @@
             </el-form>
           </el-col>
         </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12" class="cancel-button">
+            <el-button @click="cancelSubmit()"> 取消 </el-button>
+          </el-col>
+          <el-col :span="12" class="submit-button">
+            <el-button @click="confirmSubmit()"> 提交 </el-button>
+          </el-col>
+        </el-row>
       </el-dialog>
     </el-row>
   </div>
 </template>
 <script lang='ts'>
-import { defineComponent, reactive, ref, onMounted } from "vue";
+import {
+  defineComponent,
+  reactive,
+  ref,
+  onMounted,
+  computed,
+  getCurrentInstance,
+} from "vue";
+import { toRaw } from "@vue/reactivity";
 import axios from "axios";
+import { useStore } from "vuex";
 export default defineComponent({
   setup() {
+    const store = useStore();
+    const { ctx }: any = getCurrentInstance();
     const addDialogTableVisible: any = ref(); //  新增菜单弹出框
     //新增菜单表单
     const newMenuData = reactive({
@@ -55,26 +74,89 @@ export default defineComponent({
       price: "",
       detail: "",
     });
+    //菜单列表
+    
+    
+    
     addDialogTableVisible.value = false;
-    const imageUrl: any = ref();
-    imageUrl.value = "";
-    // const beforeAvatarUpload = (file:any) => {
 
-    // }
-    const handleAvatarSuccess = (res: any) => {
-      console.log(res);
-    };
-
-    // 新增菜单
+    // 弹出新增菜单框
     const addmenu = () => {
       addDialogTableVisible.value = true;
     };
+    let img: any = new Image();
+    //上传图片
+    const uploadImage = () => {
+      console.log("上传图片");
+      let inputImg: any = document.querySelector(".input-style");
+      // 压缩图片需要的一些元素和对象
+      let reader = new FileReader();
+
+      let file: any = null;
+
+      // 文件base64化，以便获知图片原始尺寸
+      inputImg.addEventListener("change", function (e: any) {
+        file = e.target.files[0];
+        // 选择的文件是图片
+        if (file.type.indexOf("image") == 0) {
+          reader.readAsDataURL(file);
+        }
+      });
+      //reader.readAsDataURL(file);转码完毕执行
+      reader.onload = function (e: any) {
+        img.src = e.target.result;
+        // 使本地图片在浏览器中预览
+        var imgbox: any = document.querySelector(".add-Dialog-left-box");
+        imgbox.innerHTML =
+          '<img style="height:202px;width:202px" src="' +
+          e.target.result +
+          '">';
+        // console.log(img.src);
+      };
+    };
+
+    //取消上传
+    const cancelSubmit = () => {
+      addDialogTableVisible.value = false;
+          
+
+    };
+    //确认上传
+    const confirmSubmit = () => {
+      // console.log("confirm upload", img.src);
+      newMenuData.picture = img.src;
+      axios
+        .post("http://localhost:3000/manager/addmenu", {
+          newMenuData,
+        })
+        .then(function (res) {
+          console.log(res);
+          addDialogTableVisible.value = false;
+          if (res.data.err == false) {
+            ctx.$message.success("新增数据成功~");
+            newMenuData.picture = res.data.newPicUrl;
+            console.log ("newMenuData changed ",toRaw(newMenuData))
+            let tableData = toRaw(store.state.menuList);
+            store.commit("menuListChanged", {
+              list: [...tableData,...[toRaw(newMenuData)]]
+            }
+          
+            );
+          }
+          else{
+            ctx.$message.success("新增数据失败~");
+          }
+        })
+        .catch(function (err) {});
+    };
+
     return {
       addDialogTableVisible,
-      addmenu,
-      imageUrl,
-      handleAvatarSuccess,
       newMenuData,
+      addmenu,
+      uploadImage,
+      cancelSubmit,
+      confirmSubmit,
     };
   },
 });
@@ -82,5 +164,34 @@ export default defineComponent({
 <style scoped>
 .add-row {
   padding: 0px 0px 10px 10px;
+}
+.add-Dialog-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-Dialog-left-box {
+  width: 200px;
+  height: 200px;
+  /* background: #73b8fdfa ; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgb(187, 182, 182);
+}
+.add-Dialog-left-box:hover {
+  border: 1px dashed #73b8fdfa;
+}
+.cancel-button {
+  text-align: right;
+}
+.submit-button {
+  text-align: left;
+}
+.input-style {
+  width: 100px;
+  height: 40px;
+  position: absolute;
+  opacity: 0;
 }
 </style>
