@@ -11,7 +11,9 @@
         </el-table-column>
         <el-table-column prop="price" label="价格" width="150">
         </el-table-column>
-        <el-table-column prop="detail" label="详细说明" width="600">
+        <el-table-column prop="type" label="类型" width="150">
+        </el-table-column>
+        <el-table-column prop="detail" label="详细说明" width="500">
         </el-table-column>
         <el-table-column label="操作" fixed="right"  width="100">
           <template #default="scope">

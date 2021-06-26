@@ -29,6 +29,12 @@
                   autocomplete="off"
                 ></el-input>
               </el-form-item>
+              <el-form-item label="类别" width="120">
+                <el-input
+                  v-model="newMenuData.type"
+                  autocomplete="off"
+                ></el-input>
+              </el-form-item>
               <el-form-item label="详细说明" width="120">
                 <el-input
                   v-model="newMenuData.detail"
@@ -72,6 +78,7 @@ export default defineComponent({
       picture: "",
       name: "",
       price: "",
+      type:"",
       detail: "",
     });
     //菜单列表
