@@ -2,10 +2,10 @@ var express = require('express')
 const fs = require('fs');
 let router = express.Router();
 
-var Login = require('./login/login.js');
-var SearchMenu = require('./home/searchmenu.js')
-var AddMenu = require('./home/addmenu.js')
-var DeleteMenu = require('./home/deletemenu')
+var Login = require('./manager/login/login.js');
+var SearchMenu = require('./manager/home/searchmenu.js')
+var AddMenu = require('./manager/home/addmenu.js')
+var DeleteMenu = require('./manager/home/deletemenu')
 
 //返回result给前端函数
 function returnJson(req, res, result) {

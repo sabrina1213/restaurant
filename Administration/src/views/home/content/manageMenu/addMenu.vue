@@ -28,6 +28,12 @@
                   v-model="newMenuData.price"
                   autocomplete="off"
                 ></el-input>
+                </el-form-item>
+                <el-form-item label="单位" width="120">
+                <el-input
+                  v-model="newMenuData.unit"
+                  autocomplete="off"
+                ></el-input>
               </el-form-item>
               <el-form-item label="类别" width="120">
                 <el-input
@@ -78,6 +84,7 @@ export default defineComponent({
       picture: "",
       name: "",
       price: "",
+      unit:'',
       type:"",
       detail: "",
     });

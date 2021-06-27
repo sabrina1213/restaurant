@@ -9,7 +9,9 @@
         </el-table-column>
         <el-table-column prop="name" label="菜名" width="200">
         </el-table-column>
-        <el-table-column prop="price" label="价格" width="150">
+        <el-table-column prop="price" label="价格" width="100">
+        </el-table-column>
+        <el-table-column prop="unit" label="单位" width="60">
         </el-table-column>
         <el-table-column prop="type" label="类型" width="150">
         </el-table-column>

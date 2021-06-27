@@ -2,10 +2,10 @@
   <el-row>
   <el-row style="width:100%;height:50px;background:pink;margin-bottom:10px;">妖精的店铺管理 </el-row>
     <el-row>
-      <el-col :span="3">
+      <el-col :span="8">
         <Nav />
       </el-col>
-      <el-col :span="21">
+      <el-col :span="16">
         <router-view></router-view>
       </el-col>
     </el-row>

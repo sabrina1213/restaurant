@@ -20,6 +20,10 @@ const routes: Array<RouteRecordRaw> = [
         path: 'manageMenu',
         component: () => import('../views/home/content/manageMenu/index.vue')
       },
+      {
+        path: 'QRcode',
+        component: ()=> import('../views/home/content/QRcode/index.vue')
+      },
     ]
 
   },

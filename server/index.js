@@ -1,8 +1,10 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const route = require('./manager')
-// let bodyParser = require('body-parser');
+const manager = require('./manager')
+const client = require('./client')
+
+
 let cookieParser = require('cookie-parser');
 let session = require('cookie-session');
 
@@ -32,7 +34,8 @@ app.use("*",function(req,res,next){
 });
 
 app.use('/public', express.static('public'));
-app.use('/manager',route);
+app.use('/manager',manager);
+app.use('/client',client);
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)
 })

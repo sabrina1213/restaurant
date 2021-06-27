@@ -9,7 +9,7 @@
       <el-menu-item index="2">
         账单管理
       </el-menu-item>
-      <el-menu-item index="3">
+      <el-menu-item index="/home/QRcode">
        桌号二维码生成
       </el-menu-item>
     </el-menu>
