@@ -7,16 +7,17 @@
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
-import axios from "axios";
+import {getTpyeList} from '../api/index.js'
 export default defineComponent({
   setup() {
-    let typelist = ref(['a','b']);
+    let typelist = ref([]);
     let box1 = ref(0);
     onMounted(() => {
-        axios.get("http://localhost:3000/client/getTpyeList").then((res)=>{
+        // axios.get("http://localhost:3000/client/getTpyeList")
+        getTpyeList().then((res)=>{
             console.log("getTpyeList",res);
-            if(res.data.err==false){
-                typelist.value = res.data.list;
+            if(res.err==false){
+                typelist.value = res.list;
                 console.log('typelist upgrade',typelist.value);
             }
         })

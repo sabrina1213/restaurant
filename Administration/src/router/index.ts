@@ -24,6 +24,10 @@ const routes: Array<RouteRecordRaw> = [
         path: 'QRcode',
         component: ()=> import('../views/home/content/QRcode/index.vue')
       },
+      {
+        path: 'manageBill',
+        component: ()=> import('../views/home/content/manageBill/index.vue')
+      }
     ]
 
   },

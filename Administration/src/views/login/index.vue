@@ -25,14 +25,15 @@
   </div>
 </template>
 <script lang="ts">
-import { getCurrentInstance, ref, reactive, toRefs, unref } from "vue";
+import { getCurrentInstance, ref, reactive } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import { login } from "../../api/index.js";
 
-interface ModelRef {
-  phone: string;
-  password: string;
-}
+// interface ModelRef {
+//   phone: string;
+//   password: string;
+// }
 
 export default {
   setup() {
@@ -40,7 +41,7 @@ export default {
     const { ctx }: any = getCurrentInstance();
     const ruleFormsss = ref<any>(null);
     // 定义变量
-    const ruleForm: ModelRef = reactive<ModelRef>({
+    const ruleForm = reactive({
       phone: "17391963670",
       password: "syt981125",
     });
@@ -62,12 +63,13 @@ export default {
           if (valid) {
             console.log(ruleForm);
             const { phone, password } = ruleForm;
-            axios.get("http://localhost:3000/manager/login?"+"phone="+phone+"&password="+password).then((response) => {
-              if(response.data.err === false){
+            
+            login({phone:phone,password:password}).then((res:any) => {
+              if(res.err === false){
                 ctx.$message.success('登录成功了~');
-                console.log("login.response",response);
+                console.log("login.response",res);
                 router.push('/home/manageMenu');
-                console.log("success.....");
+                
               }
             });
           }

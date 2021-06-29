@@ -42,6 +42,7 @@ import { defineComponent, reactive, ref, onMounted,computed } from "vue";
 import axios from "axios";
 import { toRaw } from '@vue/reactivity'
 import { useStore } from 'vuex';
+import {deleteMenu} from "@/api/index.js";
 export default defineComponent({
   setup() {
     const store = useStore();
@@ -59,15 +60,15 @@ export default defineComponent({
     // 删除菜单
     const deletemenu = (index: any, row: any) => {
       console.log(index, row.name);
-       axios
-          .get(
-            "http://localhost:3000/manager/deletemenu?" +
-              "key=" + row.name
+      //  axios
+      //     .get(
+      //       "http://localhost:3000/manager/deletemenu?" +
+      //         "key=" + row.name
               
-          )
-          .then((res) => {
+      //     )
+          deleteMenu({key: row.name}).then((res:any) => {
             console.log(res);
-            if(res.data.err == false){
+            if(res.err == false){
               console.log("删除成功")
               let list = toRaw(store.state.menuList);
               list.splice(index,1);

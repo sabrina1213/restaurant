@@ -20,6 +20,7 @@
 import { defineComponent, reactive, ref, onMounted } from "vue";
 import axios from "axios";
 import { useStore } from 'vuex';
+import {searchMenuApi} from "@/api/index.js";
 export default defineComponent({
   components: {},
   setup() {
@@ -29,31 +30,31 @@ export default defineComponent({
     const searchmenu = () => {
       console.log(inputvalue.value,inputvalue);
       if (inputvalue.value) {
-        axios
-          .get(
-            "http://localhost:3000/manager/searchmenu?" +
-              "key=" +
-              inputvalue.value
-          )
-          .then((res) => {
-            if(res.data.err == false){
+        // axios
+        //   .get(
+        //     "http://localhost:3000/manager/searchmenu?" +
+        //       "key=" +
+        //       inputvalue.value
+        //   )
+          searchMenuApi({key:inputvalue.value}).then((res:any) => {
+            if(res.err == false){
               store.commit("menuListChanged", {
-              list:res.data.list
+              list:res.list
             });
             }
           });
       } else {
-        axios
-          .get(
-            "http://localhost:3000/manager/searchmenu?" +
-              "key=" +
-              "all"
-          )
-          .then((res) => {
+        // axios
+        //   .get(
+        //     "http://localhost:3000/manager/searchmenu?" +
+        //       "key=" +
+        //       "all"
+        //   )
+           searchMenuApi({key:'all'}).then((res:any) => {
             console.log(res); 
-            if(res.data.err == false){
+            if(res.err == false){
               store.commit("menuListChanged", {
-              list:res.data.list
+              list:res.list
             });
             }
             

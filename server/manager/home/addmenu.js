@@ -5,12 +5,13 @@ const addmenu = (req,callback)=>{
     var pool = mysql.createPool(dbConfig.mysql);
 
     console.log("新增数据",req.body);
-    var pic = req.body.newMenuData.picture;
-    var name = req.body.newMenuData.name;
-    var price = req.body.newMenuData.price;
-    var detail = req.body.newMenuData.detail;
-    var type = req.body.newMenuData.type;
-    var unit = req.body.newMenuData.unit;
+    
+    var pic = req.body.params.picture;
+    var name = req.body.params.name;
+    var price = req.body.params.price;
+    var detail = req.body.params.detail;
+    var type = req.body.params.type;
+    var unit = req.body.params.unit;
     var picUrl = './public/images/'+name+'.jpg'
 
     var base64 = pic.replace(/^data:image\/\w+;base64,/, ""); //去掉图片base64码前面部分data:image/png;base64

@@ -1,14 +1,14 @@
 <template>
   <el-row>
   <el-row style="width:100%;height:50px;background:pink;margin-bottom:10px;">妖精的店铺管理 </el-row>
-    <el-row>
-      <el-col :span="8">
+    <div class="box">
+      <div class="nav">
         <Nav />
-      </el-col>
-      <el-col :span="16">
+      </div>
+      <div class="content">
         <router-view></router-view>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </el-row>
 </template>
 <script lang="ts">
@@ -21,4 +21,15 @@ export default defineComponent({
   setup() {},
 });
 </script>
+<style scoped>
+.box{
+  display: flex;
+}
+.nav{
+  width: 200px;
+}
+.content{
+  flex: 1;
+}
+</style>
 

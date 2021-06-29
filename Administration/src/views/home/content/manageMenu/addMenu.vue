@@ -74,6 +74,9 @@ import {
 import { toRaw } from "@vue/reactivity";
 import axios from "axios";
 import { useStore } from "vuex";
+import { addmenu } from "../../api/index.js";
+import { addMenu } from "@/api/index.js";
+
 export default defineComponent({
   setup() {
     const store = useStore();
@@ -139,16 +142,16 @@ export default defineComponent({
     const confirmSubmit = () => {
       // console.log("confirm upload", img.src);
       newMenuData.picture = img.src;
-      axios
-        .post("http://localhost:3000/manager/addmenu", {
-          newMenuData,
-        })
-        .then(function (res) {
+      // axios
+      //   .post("http://localhost:3000/manager/addmenu", {
+      //     newMenuData,
+      //   })
+        addMenu(newMenuData).then(function (res:any) {
           console.log(res);
           addDialogTableVisible.value = false;
-          if (res.data.err == false) {
+          if (res.err == false) {
             ctx.$message.success("新增数据成功~");
-            newMenuData.picture = res.data.newPicUrl;
+            newMenuData.picture = res.newPicUrl;
             console.log ("newMenuData changed ",toRaw(newMenuData))
             let tableData = toRaw(store.state.menuList);
             store.commit("menuListChanged", {
@@ -161,7 +164,7 @@ export default defineComponent({
             ctx.$message.success("新增数据失败~");
           }
         })
-        .catch(function (err) {});
+        // .catch(function (err) {});
     };
 
     return {

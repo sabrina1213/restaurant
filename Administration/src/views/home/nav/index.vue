@@ -6,7 +6,7 @@
       @select="handleSelect">
       <el-menu-item index="/home/manageMenu" >菜单管理</el-menu-item>
     
-      <el-menu-item index="2">
+      <el-menu-item index="/home/manageBill">
         账单管理
       </el-menu-item>
       <el-menu-item index="/home/QRcode">

@@ -56,15 +56,18 @@ router.use('/login', function (req, res) {
     var phone,password;
     console.log('login....begin');
     console.log("req",req.query);
-    if(req.body.phone){
-        console.log('login....get phone');
-		phone = req.body.phone;
-		password = req.body.password; 
-	}
-	else if(req.query.phone){
-		phone = req.query.phone;
-		password = req.query.password;
-	}
+    // if(req.body.phone){
+    //     console.log('login....get phone');
+	// 	phone = req.body.phone;
+	// 	password = req.body.password; 
+	// }
+	// else if(req.query.phone){
+	// 	phone = req.query.phone;
+	// 	password = req.query.password;
+	// }
+    phone = req.query.phone;
+	password = req.query.password;
+    console.log('phone',phone,password);
     if (isPhone(phone) && isPassword(password)) {
         Login(req, phone,password,function (result) {
             // console.log("login....",req,res,result);
