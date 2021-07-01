@@ -4,20 +4,19 @@
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column label="图片" width="80">
           <template #default="scope">
-            <img style="height:50px;width:50px" :src="scope.row.picture" />
+            <img style="height: 50px; width: 50px" :src="scope.row.picture" />
           </template>
         </el-table-column>
         <el-table-column prop="name" label="菜名" width="200">
         </el-table-column>
         <el-table-column prop="price" label="价格" width="100">
         </el-table-column>
-        <el-table-column prop="unit" label="单位" width="60">
-        </el-table-column>
+        <el-table-column prop="unit" label="单位" width="60"> </el-table-column>
         <el-table-column prop="type" label="类型" width="150">
         </el-table-column>
         <el-table-column prop="detail" label="详细说明" width="500">
         </el-table-column>
-        <el-table-column label="操作" fixed="right"  width="100">
+        <el-table-column label="操作" fixed="right" width="100">
           <template #default="scope">
             <el-button
               type="text"
@@ -38,52 +37,44 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref, onMounted,computed } from "vue";
-import axios from "axios";
-import { toRaw } from '@vue/reactivity'
-import { useStore } from 'vuex';
-import {deleteMenu} from "@/api/index.js";
+import { defineComponent, reactive, ref, onMounted, computed ,getCurrentInstance} from "vue";
+import { toRaw } from "@vue/reactivity";
+import { useStore } from "vuex";
+import { deleteMenu } from "@/api/index.js";
 export default defineComponent({
   setup() {
     const store = useStore();
+    const { ctx }: any = getCurrentInstance();
     //菜单列表
-    let tableData = computed(()=>{
-      return toRaw(store.state.menuList);
-    })
-      
-    console.log ("tableData",tableData);
+    let tableData = computed(() => {
+      // return toRaw(store.state.menuList);
+      console.log('列表更新');
+      return store.state.menuList;
+    });
+
+    console.log("tableData", tableData);
     // 编辑菜单
     const handelmenu = (index: any, row: any) => {
       console.log(index, row);
-       
     };
     // 删除菜单
     const deletemenu = (index: any, row: any) => {
       console.log(index, row.name);
-      //  axios
-      //     .get(
-      //       "http://localhost:3000/manager/deletemenu?" +
-      //         "key=" + row.name
-              
-      //     )
-          deleteMenu({key: row.name}).then((res:any) => {
-            console.log(res);
-            if(res.err == false){
-              console.log("删除成功")
-              let list = toRaw(store.state.menuList);
-              list.splice(index,1);
-              console.log("after delete menulist ",list);
-              store.commit("menuListChanged", {
-              list:list
-            });
-            }
+      deleteMenu({ key: row.name }).then((res: any) => {
+        console.log(res);
+        
+        if (res.err == false) {
+          let list = store.state.menuList;
+          list.splice(index, 1);
+          console.log("after delete menulist ", list);
+          store.commit("menuListChanged", {
+            list: list,
           });
-       
+          ctx.$message.success("删除成功~");
+        }
+      });
     };
-   onMounted(() => {
-      
-       
-    });
+    onMounted(() => {});
 
     return {
       tableData,
@@ -96,7 +87,6 @@ export default defineComponent({
 
 
 <style scoped>
-
 .add-row {
   padding: 0px 0px 10px 10px;
 }

@@ -9,9 +9,9 @@ const post = (url) => {
                 params
             }
             ).then((res) => {
-                console.log(url, res, 'request.js')
+                console.log(url, res)
                 const data = res.data
-                console.log(data, 'request.jsdata')
+                console.log(data)
                 if (data.err === false) {
                     resolve(data)
                 } else {

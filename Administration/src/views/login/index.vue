@@ -26,14 +26,10 @@
 </template>
 <script lang="ts">
 import { getCurrentInstance, ref, reactive } from "vue";
-import axios from "axios";
 import { useRouter } from "vue-router";
 import { login } from "../../api/index.js";
 
-// interface ModelRef {
-//   phone: string;
-//   password: string;
-// }
+
 
 export default {
   setup() {

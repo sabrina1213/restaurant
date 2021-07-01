@@ -5,4 +5,5 @@ declare module '*.vue' {
   export default component
 }
 
+//解决引入外部文件出错的问题
 declare module '*.js'
