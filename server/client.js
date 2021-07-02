@@ -3,7 +3,7 @@ var express = require('express')
 let router = express.Router();
 
 var getTpyeList = require('./client/getTypeList');
-
+var getMenulist = require('./client/getMenulist')
 //返回result给前端函数
 function returnJson(req, res, result) {
     if (req.jsonp) {
@@ -18,5 +18,9 @@ router.use('/getTpyeList',function(req,res){
         returnJson(req,res,result);
     })
 })
-
+router.use('/getMenulist',function(req,res){
+    getMenulist(req,function(result){
+        returnJson(req,res,result);
+    })
+})
 module.exports = router
