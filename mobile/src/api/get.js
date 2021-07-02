@@ -16,14 +16,12 @@ const get = (url) => {
 
     return (params) => {
         return new Promise((resolve, reject) => {
-            axios.get(url, {
-                 
-                 params
-                
+            axios.get(url, { 
+                params
             }).then((res) => {
                 console.log(url, res, 'request.js')
                 const data = res.data
-                console.log(data, 'request.jsdata')
+                
                 if (data.err === false) {
                     resolve(data)
                 } else {

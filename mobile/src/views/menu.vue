@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(item, index) in menu" :key="index" class="menu-box">
+    <div v-for="(item, index) in menulist" :key="index" class="menu-box">
       <div class="left">
         {{ item.pic }}
       </div>
@@ -18,47 +18,30 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent ,computed, onMounted} from "vue";
+
+import {useStore} from 'vuex'
 export default defineComponent({
   setup() {
+    const store = useStore();
     const menu = [
       {
         pic: "dd",
         name: "tianbao",
         price: "50",
       },
-      {
-        pic: "dd",
-        name: "tianbao",
-        price: "50",
-      },
-      {
-        pic: "dd",
-        name: "tianbao",
-        price: "50",
-      },
-      {
-        pic: "dd",
-        name: "tianbao",
-        price: "50",
-      },
-      {
-        pic: "dd",
-        name: "tianbao",
-        price: "50",
-      },
-      {
-        pic: "dd",
-        name: "tianbao",
-        price: "50",
-      },{
-        pic: "dd",
-        name: "tianbao",
-        price: "50",
-      },
     ];
+    let menulist = computed(()=>{
+      console.log('列表更新');
+      return store.state.menuList;
+      
+    })
+    
+    console.log('list menu.vue ',menulist);
+   
     return {
       menu,
+      menulist
     };
   },
 });

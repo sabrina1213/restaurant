@@ -11,6 +11,26 @@ const routes: Array<RouteRecordRaw> = [
     ]
 
   },
+  {
+    path: '/info',
+    name: 'Infomation',
+    component: ()=>import('../views/comBar/infomation/toinfo.vue'),
+  },
+  {
+    path: '/bill',
+    name: 'Bill',
+    component: ()=>import('../views/comBar/bill/bill.vue'),
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: ()=>import('../views/comBar/search/search.vue'),
+  },
+  {
+    path:'/test',
+    name: 'test',
+    component: () => import('../views/test.vue')
+  }
 ]
 
 const router = createRouter({

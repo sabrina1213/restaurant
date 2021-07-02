@@ -72,9 +72,6 @@ export default defineComponent({
 .bar{
   flex: 1;
   height: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-items:flex-end;
 }
 .middle {
   height: 100%;

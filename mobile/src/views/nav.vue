@@ -1,35 +1,58 @@
 <template>
   <div>
-    <div v-for="(item, index) in typelist" :key="index" :class="{box:true,box1:box1==index}" @click="mouseclick(index)">
-        {{ item.type }}</div>
+    <div
+      v-for="(item, index) in typelist"
+      :key="index"
+      :class="{ box: true, box1: box1 == index }"
+      @click="mouseclick(index)"
+    >
+      {{ item.type }}
+    </div>
   </div>
 </template>
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
-import {getTpyeList} from '../api/index.js'
+import { getTpyeList, getMenuList } from "../api/index.js";
+
+import { useStore } from "vuex";
 export default defineComponent({
   setup() {
-    let typelist = ref([]);
-    let box1 = ref(0);
+    const store = useStore();
+    let typelist = ref(); //类型列表
+    let box1 = ref(0); //设置高亮
+
     onMounted(() => {
-        // axios.get("http://localhost:3000/client/getTpyeList")
-        getTpyeList().then((res)=>{
-            console.log("getTpyeList",res);
-            if(res.err==false){
-                typelist.value = res.list;
-                console.log('typelist upgrade',typelist.value);
-            }
-        })
+      //获取菜单类型列表
+      getTpyeList().then((res) => {
+        console.log("getTpyeList", res);
+        if (res.err == false) {
+          typelist.value = res.list;
+          console.log("typelist upgrade", typelist.value);
+          getMenuList({ key: typelist.value[0].type }).then((res) => {
+            store.commit("menuListChanged", {
+              list: res.list,
+            });
+          });
+        }
+      });
     });
-    const mouseclick=(index)=>{
-        console.log('mouseclick',index);
-        box1.value = index;
-    }
+    const mouseclick = (index) => {
+      console.log("mouseclick", index, typelist.value[index].type);
+      //设置高亮
+      box1.value = index;
+
+      // 获取对应类别下菜单列表;
+      getMenuList({ key: typelist.value[index].type }).then((res) => {
+        store.commit("menuListChanged", {
+          list: res.list,
+        });
+      });
+    };
     return {
       typelist,
       mouseclick,
-      box1
+      box1,
     };
   },
 });
@@ -42,7 +65,7 @@ export default defineComponent({
   text-align: center;
   line-height: 50px;
 }
-.box1{
-    background: crimson;
+.box1 {
+  background: crimson;
 }
 </style>
