@@ -3,10 +3,10 @@
     <div class="top">妖精的店铺</div>
     <div class="title">
       <div class="table">
-        <Table/>
+        <Table />
       </div>
-      <div class="bar"> 
-        <Bar/>
+      <div class="bar">
+        <Bar />
       </div>
     </div>
     <div class="middle">
@@ -18,30 +18,41 @@
       </div>
     </div>
     <div class="bottom">
-      <Car />
+      <div class="mengceng" v-if="isshowMengCeng">蒙层</div>
+      <Car @carEmit="isMengCeng" :value="isshowMengCeng"/>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import {ref,} from 'vue'
 import Nav from "./nav.vue";
 import Menu from "./menu.vue";
 import Car from "./shoppingCar.vue";
-import Table from "./tableNumber.vue"
-import Bar from "./comBar/index.vue"
-export default defineComponent({
+import Table from "./tableNumber.vue";
+import Bar from "./comBar/index.vue";
+export default {
   components: {
     Nav,
     Menu,
     Car,
     Table,
-    Bar
+    Bar,
   },
-  setup() {},
-});
+  setup() {
+    
+    let isshowMengCeng = ref(false);
+    const isMengCeng = (e:boolean)=>{
+      isshowMengCeng.value = e;
+      console.log('showmengceng',e);
+    }
+    return{
+      isshowMengCeng,
+      isMengCeng
+    }
+  },
+};
 </script>
 <style scoped>
-/* 这里没有使用flex布局需要review的时候改正*/
 .top {
   width: 100%;
   height: 50px;
@@ -57,19 +68,19 @@ export default defineComponent({
   width: 100%;
   display: flex;
   justify-content: flex-start;
-  align-items:flex-end;
+  align-items: flex-end;
 }
-.table{
-   width: 50%;
-   height: 100%;
-   /* text-align: left ; */
-   display: inline-block;
-   display: flex;
+.table {
+  width: 50%;
+  height: 100%;
+  /* text-align: left ; */
+  display: inline-block;
+  display: flex;
   justify-content: flex-start;
-  align-items:flex-end;
+  align-items: flex-end;
 }
 
-.bar{
+.bar {
   flex: 1;
   height: 100%;
 }
@@ -92,7 +103,7 @@ export default defineComponent({
   flex: 1;
   height: 100%;
   background: coral;
-  overflow:scroll;
+  overflow: scroll;
 }
 .bottom {
   background: rgb(7, 100, 35);
@@ -100,6 +111,15 @@ export default defineComponent({
   bottom: 0;
   width: 100%;
   height: 40px;
+}
+.mengceng {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: gray;
+  top: 0;
+  z-index: -10;
+  opacity: 0.5;
 }
 </style>
 

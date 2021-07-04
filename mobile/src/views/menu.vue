@@ -1,15 +1,22 @@
 <template>
   <div>
-    <div v-for="(item, index) in menulist" :key="index" class="menu-box">
+    <div v-for="(item, index) in menuList" :key="index" class="menu-box">
       <div class="left">
-        {{ item.pic }}
+        <img :src="item.picture" style="width: 80px;height: 80px;border-radius:10px;"/>
+         <!-- {{ item.pic }} -->
       </div>
       <div class="right">
         <div class="right-top">{{ item.name }}</div>
         <div class="right-bottom">
             <div class="price">{{item.price}}</div>
-            <div class="add-botton">jiaaaaaa
+            <div class="add-botton">
+              <div style="display:inline;" @click="numSub(index)">
+              <i class="iconfont icon-iconset0187"></i>
+              </div>
+              {{item.count}}
+              <div style="display:inline;" @click="numAdd(index)">
                 <i class="iconfont icon-iconset0186"></i>
+              </div>
             </div>
         </div>
       </div>
@@ -24,24 +31,27 @@ import {useStore} from 'vuex'
 export default defineComponent({
   setup() {
     const store = useStore();
-    const menu = [
-      {
-        pic: "dd",
-        name: "tianbao",
-        price: "50",
-      },
-    ];
-    let menulist = computed(()=>{
+    //菜单列表
+    let  menuList= computed(()=>{
       console.log('列表更新');
       return store.state.menuList;
-      
     })
-    
-    console.log('list menu.vue ',menulist);
-   
+    //账单列表
+    let billList = [];
+ 
+    //添加数量
+    const numAdd = (index)=>{
+      console.log('numadd',billList);
+      // billList.push({men})
+    }
+    //减少数量
+   const numSub = (index)=>{
+     console.log('numsub',billList);
+   }
     return {
-      menu,
-      menulist
+      menuList,
+      numAdd,
+      numSub
     };
   },
 });

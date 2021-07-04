@@ -17,13 +17,13 @@ import Bill from './bill/index.vue'
 import Information from './infomation/index.vue'
 import Search from './search/index.vue'
 import { defineComponent } from "vue";
-export default defineComponent({
+export default {
   components:{
     Bill,
     Information,
     Search
   }
-})
+}
 </script>
 
 <style scoped>

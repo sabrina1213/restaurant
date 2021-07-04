@@ -2,7 +2,7 @@ const mysql = require("mysql");
 var dbConfig = require("../database/dbconfig");
 
 const menuList = (req,callback) =>{
-    console.log('ypelistreq',req);
+    // console.log('typelistreq',req);
     var key = req.query.key;
     console.log('typelist',key);
     var pool = mysql.createPool(dbConfig.mysql);
@@ -32,7 +32,11 @@ const menuList = (req,callback) =>{
                         callback(result);
                     }
                     else{
-                        var list = result;
+                        var list = [];
+                        list = result;
+                        list.forEach(element => {
+                            element.count = 0;
+                        });
                         result = {
                             err: false,
                             result: "查询成功",

@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+
 import { useRouter } from 'vue-router'
-export default defineComponent({
+export default {
     setup(){
         const router = useRouter();
         const toBill = ()=>{
@@ -20,7 +20,7 @@ export default defineComponent({
             toBill,
         }
     }
-})
+}
 </script>
 
 <style>

@@ -42,7 +42,7 @@ export default defineComponent({
       //设置高亮
       box1.value = index;
 
-      // 获取对应类别下菜单列表;
+      //获取对应类别下菜单列表;
       getMenuList({ key: typelist.value[index].type }).then((res) => {
         store.commit("menuListChanged", {
           list: res.list,
