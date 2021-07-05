@@ -17,7 +17,8 @@ import { getTpyeList, getMenuList } from "../api/index.js";
 
 import { useStore } from "vuex";
 export default defineComponent({
-  setup() {
+  name:'Nav',
+  setup(props,{ emit }) {
     const store = useStore();
     let typelist = ref(); //类型列表
     let box1 = ref(0); //设置高亮
@@ -29,7 +30,9 @@ export default defineComponent({
         if (res.err == false) {
           typelist.value = res.list;
           console.log("typelist upgrade", typelist.value);
-          getMenuList({ key: typelist.value[0].type }).then((res) => {
+          emit("navEmit",typelist.value[0].type);
+          // getMenuList({ key: typelist.value[0].type }).then((res) => {
+           getMenuList().then((res) => {
             store.commit("menuListChanged", {
               list: res.list,
             });
@@ -43,11 +46,13 @@ export default defineComponent({
       box1.value = index;
 
       //获取对应类别下菜单列表;
-      getMenuList({ key: typelist.value[index].type }).then((res) => {
-        store.commit("menuListChanged", {
-          list: res.list,
-        });
-      });
+      // getMenuList({ key: typelist.value[index].type }).then((res) => {
+      //   store.commit("menuListChanged", {
+      //     list: res.list,
+      //   });
+      // });
+      emit("navEmit",typelist.value[index].type);
+
     };
     return {
       typelist,

@@ -11,14 +11,14 @@
     </div>
     <div class="middle">
       <div class="middle-left">
-        <Nav />
+        <Nav @navEmit="whichType"/>
       </div>
       <div class="middle-right">
-        <Menu />
+        <Menu :type="whichtype"/>
       </div>
     </div>
     <div class="bottom">
-      <div class="mengceng" v-if="isshowMengCeng">蒙层</div>
+      <div class="mengceng" v-if="isshowMengCeng"></div>
       <Car @carEmit="isMengCeng" :value="isshowMengCeng"/>
     </div>
   </div>
@@ -39,15 +39,23 @@ export default {
     Bar,
   },
   setup() {
-    
+    //从Car组件获取是否添加遮罩(蒙层)
     let isshowMengCeng = ref(false);
     const isMengCeng = (e:boolean)=>{
       isshowMengCeng.value = e;
       console.log('showmengceng',e);
-    }
+    };
+    //接收Nav组件的菜单类型切换
+    let whichtype = ref();
+    const whichType = (e:string)=>{
+        whichtype.value = e;
+        console.log('----------index get type------------',whichtype.value,e);
+    };
     return{
       isshowMengCeng,
-      isMengCeng
+      isMengCeng,
+      whichType,
+      whichtype,
     }
   },
 };
