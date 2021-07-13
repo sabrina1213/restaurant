@@ -95,9 +95,18 @@ export default {
     //跳转到账单页面
     const toEnsureBill = () => {
       console.log('postBillList',menuList);
-      postBillList(menuList).then((res)=>{
+      var params = window.location.search ;
+      var number = params.slice(6);
+      postBillList({list:menuList.value,money:totalPrice.value,table:number}).then((res)=>{
         if(res.err ==false){
-          router.push("/bill");
+          console.log(res.billNumber,res.submissionTime);
+          router.push({
+            path:"/bill",
+            query:{
+              billNumber:res.billNumber,
+              submissionTime:res.submissionTime
+            }
+            });
         }
       })
       
