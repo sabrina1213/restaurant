@@ -126,7 +126,6 @@ export default defineComponent({
           '<img style="height:202px;width:202px" src="' +
           e.target.result +
           '">';
-        // console.log(img.src);
       };
     };
 
@@ -160,7 +159,7 @@ export default defineComponent({
             ctx.$message.success("新增数据失败~");
           }
         })
-        // .catch(function (err) {});
+        
     };
 
     return {
