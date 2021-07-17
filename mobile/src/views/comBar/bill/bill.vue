@@ -99,13 +99,14 @@ export default {
   text-align: center;
   position: fixed;
   top: 0;
+  background-color: #fff;
 }
 .bill-body {
   width: 100%;
   overflow: scroll;
   margin-top: 30px;
   margin-bottom: 50px;
-  background-color: rgb(209, 209, 211);
+  background-color: rgb(228, 228, 228);
 }
 .bill-bottom {
   height: 50px;
@@ -117,7 +118,7 @@ export default {
 }
 .bill-text {
   height: 50;
-  border: 1px solid grey;
+  border: 1px solid rgb(197, 197, 197);
   margin: 10px;
   background-color: #fff;
   /* width: 100%; */
@@ -129,7 +130,7 @@ export default {
 }
 .bill-list-child {
   /* width: 100%; */
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid rgb(202, 202, 202);
   display: flex;
   height: 55px;
   padding: 5px;
@@ -146,7 +147,7 @@ export default {
   width: 50px;
 }
 .bill-info {
-  border: 1px solid grey;
+  border: 1px solid rgb(189, 189, 189);
   margin: 10px;
   background-color: #fff;
 }

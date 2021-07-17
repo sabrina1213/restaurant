@@ -33,7 +33,7 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import {postBillList} from "@/api/index"
+import { postBillList } from "@/api/index";
 export default {
   name: "Car",
   props: {
@@ -94,22 +94,30 @@ export default {
     };
     //跳转到账单页面
     const toEnsureBill = () => {
-      console.log('postBillList',menuList);
-      var params = window.location.search ;
-      var number = params.slice(6);
-      postBillList({list:menuList.value,money:totalPrice.value,table:number}).then((res)=>{
-        if(res.err ==false){
-          console.log(res.billNumber,res.submissionTime);
-          router.push({
-            path:"/bill",
-            query:{
-              billNumber:res.billNumber,
-              submissionTime:res.submissionTime
-            }
+      if (menuList.value.length > 0) {
+        console.log("postBillList", menuList);
+        var params = window.location.search;
+        var number = params.slice(6);
+        postBillList({
+          list: menuList.value,
+          money: totalPrice.value,
+          table: number,
+        }).then((res) => {
+          if (res.err == false) {
+            console.log(res.billNumber, res.submissionTime);
+            router.push({
+              path: "/bill",
+              query: {
+                billNumber: res.billNumber,
+                submissionTime: res.submissionTime,
+              },
             });
-        }
-      })
-      
+          }
+        });
+      }
+      else{
+        alert('请添加商品')
+      }
     };
     return {
       totalPrice,
@@ -133,7 +141,7 @@ export default {
   height: 130px;
   position: absolute;
   top: -130px;
-  background: fuchsia;
+  background: rgb(245, 212, 162);
   overflow: scroll;
 }
 .bill-box-child {
@@ -156,7 +164,7 @@ export default {
   display: flex;
   width: 100%;
   height: 100%;
-  background: greenyellow;
+  background: rgb(180, 206, 141);
 }
 .left {
   width: 50px;

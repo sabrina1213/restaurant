@@ -110,7 +110,7 @@ export default {
 .middle-right {
   flex: 1;
   height: 100%;
-  background: coral;
+  background: rgb(246, 120, 73);
   overflow: scroll;
 }
 .bottom {

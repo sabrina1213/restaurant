@@ -22,7 +22,7 @@ const get = (url) => {
             ).then((res) => {
                 console.log(url, res)
                 const data = res.data
-                console.log(data)
+                
                 if (data.err === false) {
                     resolve(data)
                 } else {

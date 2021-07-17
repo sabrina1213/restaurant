@@ -13,10 +13,11 @@
         <div class="right-bottom">
           <div class="price">{{ item.price }}</div>
           <div class="add-botton">
-            <div style="display: inline" @click="numSub(index)">
+            <div style="display: inline" @click="numSub(index)" v-if="item.count>0">
               <i class="iconfont icon-iconset0187"></i>
             </div>
-            {{ item.count }}
+            <div style="display: inline" v-if="item.count>0"> {{ item.count }}</div>
+           
             <div style="display: inline" @click="numAdd(index)">
               <i class="iconfont icon-iconset0186"></i>
             </div>

@@ -7,10 +7,12 @@ const addMenu = post('/manager/addmenu');
 const deleteMenu = get('/manager/deletemenu');
 const searchMenuApi = get('/manager/searchmenu');
 const searchBill = get('/manager/searchBill');
+const searchBillDetail = get('/manager/searchBillDetail');
 export {
     login,
     addMenu,
     deleteMenu,
     searchMenuApi,
-    searchBill
+    searchBill,
+    searchBillDetail
 }

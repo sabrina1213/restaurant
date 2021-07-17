@@ -71,6 +71,6 @@ export default defineComponent({
   line-height: 50px;
 }
 .box1 {
-  background: crimson;
+  background: rgb(233, 129, 149);
 }
 </style>

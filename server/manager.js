@@ -7,6 +7,8 @@ var SearchMenu = require('./manager/home/searchmenu.js')
 var AddMenu = require('./manager/home/addmenu.js')
 var DeleteMenu = require('./manager/home/deletemenu')
 var searchBill = require('./manager/home/searchbill')
+var searchBillDetail = require('./manager/home/searchBillDetail')
+
 //返回result给前端函数
 function returnJson(req, res, result) {
     if (req.jsonp) {
@@ -112,5 +114,10 @@ router.use('/searchBill',function(req,res){
         returnJson(req, res, result);
     })
 })
-
+//查找账单详情
+router.use('/searchBillDetail',function(req,res){
+    searchBillDetail(req,function(result){
+        returnJson(req, res, result);
+    })
+})
 module.exports= router; 
