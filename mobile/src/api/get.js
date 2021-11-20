@@ -6,20 +6,16 @@ import {
 } from 'vue-router'
 
 const get = (url) => {
-    // const router = useRouter()
-    // let server = process.env.NODE_ENV !== 'development' ? 'http://api.lccbjc.com/' : ''
-    // let session = localStorage.getItem('session', '')
-    // if (session == '') {
-    //     router.push('/login')
-    //     return
-    // }
-
+    if(process.env.NODE_ENV !== 'development'&&process.env.NODE_ENV=='production'){
+        url = 'http://101.34.51.116:3000'+url;
+    }
     return (params) => {
         return new Promise((resolve, reject) => {
+            
             axios.get(url, { 
                 params
             }).then((res) => {
-                console.log(url, res, 'request.js')
+                // console.log(url, res, 'request.js')
                 const data = res.data
                 
                 if (data.err === false) {

@@ -13,7 +13,7 @@ export default {
     setup(){
         const router = useRouter();
         const toBill = ()=>{
-            console.log('tobill');
+            // console.log('tobill');
             router.push('/bill');
         }
         return {

@@ -1,30 +1,51 @@
 <template>
   <div class="shoppingCar">
-    <div class="bill-box" v-if="isshow" :key="isshow">
+   
+    <div class="drawer">
       <div
-        v-for="(item, index) in menuList"
-        :key="index"
-        class="bill-box-child"
-      >
-        <div class="bill-box-child-left">{{ item.name }}</div>
-        <div class="bill-box-child-middle">¥{{ item.price }}</div>
-        <div class="bill-box-child-right">
-          <div style="display: inline" @click="numSub(index)">
-            <i class="iconfont icon-iconset0187"></i>
-          </div>
-          {{ item.count }}
-          <div style="display: inline" @click="numAdd(index)">
-            <i class="iconfont icon-iconset0186"></i>
-          </div>
-        </div>
+        :class="{ maskShow: isshow, maskHide: !isshow }"
+        @click="closeByMask()"
+      ></div>
+      <div :class="{ slider: true, sliderShow: isshow, sliderHide: !isshow }">
+        <div class="drawer-title">已选商品</div>
+        <ul class="drawer-goods-container">
+          <li
+            v-for="(item, index) in billList"
+            :key="index"
+            class="drawer-goods-content"
+          >
+            <div class="drawer-goods-item">
+              <div class="goods-name">{{ item.name }}</div>
+              <div class="goods-price">¥{{ item.price }}</div>
+              <div class="goods-process">
+                <div style="display: inline" @click="numSub(index, item)">
+                  <i class="iconfont icon-iconset0187"></i>
+                </div>
+                <span
+                  style="
+                    display: inline-block;
+                    font-size: 0.4rem;
+                    width: 0.9rem;
+                  "
+                >
+                  {{ item.count }}
+                </span>
+
+                <div style="display: inline" @click="numAdd(index, item)">
+                  <i class="iconfont icon-iconset0186"></i>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="box">
-      <div class="left" @click="showbill">
-        <i class="iconfont icon-iconset0308" style="font-size: 30px"></i>
+    <div class="shopping-car-layout">
+      <div class="shopping-car-layout-left" @click="showbill()">
+        <i class="iconfont icon-iconset0308"></i>
       </div>
-      <div class="middle">¥ {{ totalPrice }}</div>
-      <div class="right" @click="toEnsureBill">点击下单</div>
+      <div class="shopping-car-layout-middle">¥ {{ totalPrice }}</div>
+      <div class="shopping-car-layout-right" @click="toEnsureBill">去下单</div>
     </div>
   </div>
 </template>
@@ -34,6 +55,8 @@ import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { postBillList } from "@/api/index";
+import sessionFun from "../utils/sessionFun";
+import Toast from "../componets/toast"; 
 export default {
   name: "Car",
   props: {
@@ -42,20 +65,18 @@ export default {
   setup(props, { emit }) {
     const store = useStore();
     const router = useRouter();
-
+   
     //filter筛选menulist生成购物车列表
-    let menuList = computed(() => {
-      console.log("列表更新");
+    let billList = computed(() => {
       // 筛选list
       return store.state.menuList.filter((item) => {
         return item.count != 0;
       });
     });
-
     // 总钱数
     let totalPrice = computed(() => {
       let price = 0;
-      menuList.value.forEach((item) => {
+      billList.value.forEach((item) => {
         price += item.count * item.price;
       });
       return price;
@@ -65,48 +86,68 @@ export default {
 
     //展示账单框
     const showbill = () => {
-      console.log("isshow", isshow, "from father value", props.value);
-      isshow.value = !isshow.value;
-      emit("carEmit", isshow.value);
+      if (billList.value.length > 0) {
+        isshow.value = true;
+      } else {
+        alert("请添加商品");
+      }
+
+      // emit("carEmit", isshow.value);
+    };
+
+    //关闭账单框
+    const closeByMask = () => {
+      console.log("close-----car ---detial");
+      isshow.value = false;
     };
 
     //减少数量
-    const numSub = (index) => {
+    const numSub = (index, item) => {
       console.log("numsub");
+
+      sessionFun("sub", item);
       // 商品数量减一
-      menuList.value[index].count--;
-      console.log("new menulist", menuList);
+      billList.value[index].count--;
+
       store.commit("menuListAddCount", {
-        name: menuList.value[index].name,
-        count: menuList.value[index].count,
+        name: billList.value[index].name,
+        count: billList.value[index].count,
       });
     };
     //添加数量
-    const numAdd = (index) => {
+    const numAdd = (index, item) => {
       console.log("numadd");
+      sessionFun("add", item);
       // 商品数量加一
-      menuList.value[index].count++;
-      console.log("new menulist", menuList);
+      billList.value[index].count++;
+
       store.commit("menuListAddCount", {
-        name: menuList.value[index].name,
-        count: menuList.value[index].count,
+        name: billList.value[index].name,
+        count: billList.value[index].count,
       });
     };
+
     //跳转到账单页面
     const toEnsureBill = () => {
-      if (menuList.value.length > 0) {
-        console.log("postBillList", menuList);
-        var params = window.location.search;
-        var number = params.slice(6);
+      if (billList.value.length > 0) {
+        console.log("postBillList---------", billList);
+        sessionStorage.setItem("isEnsureBill", "true");
+        var params = window.location.hash;
+    
+        var number = params.slice(19);
+       
         postBillList({
-          list: menuList.value,
+          list: billList.value,
           money: totalPrice.value,
           table: number,
         }).then((res) => {
           if (res.err == false) {
             console.log(res.billNumber, res.submissionTime);
+            sessionStorage.setItem("billNumber", res.billNumber);
+            sessionStorage.setItem("submissionTime", res.submissionTime);
+
             router.push({
-              path: "/bill",
+              path: "/menu/bill",
               query: {
                 billNumber: res.billNumber,
                 submissionTime: res.submissionTime,
@@ -114,19 +155,31 @@ export default {
             });
           }
         });
-      }
-      else{
-        alert('请添加商品')
+      } else {
+         const toast = Toast({
+          value: "请添加商品",
+          duration: 0, // 如果大于0则不必使用destory方法
+          background: "#303030ad",
+          color: "#fff",
+        });
+        setTimeout(() => {
+          toast.destory && toast.destory();
+        }, 3000);
+        
       }
     };
+
     return {
+   
       totalPrice,
       isshow,
-      menuList,
+      billList,
       showbill,
+      closeByMask,
       toEnsureBill,
       numSub,
       numAdd,
+
     };
   },
 };
@@ -134,49 +187,124 @@ export default {
 
 <style scoped>
 .shoppingCar {
-  z-index: 20;
+  height: 100%;
 }
-.bill-box {
+
+.maskShow {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 130px;
-  position: absolute;
-  top: -130px;
-  background: rgb(245, 212, 162);
-  overflow: scroll;
+  height: 100%;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 1;
+  /* transition: all 5s ease 0s; */
 }
-.bill-box-child {
+.maskHide {
+  /* opacity: 0; */
+  transition: 0.5s;
+  display: none;
+}
+.slider {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  /* transition: all 0.5s; */
+  /* transition: all 5s ease 0s; */
+}
+.sliderShow {
+  opacity: 1;
+}
+.sliderHide {
+  /* opacity: 0; */
+  display: none;
+}
+
+.drawer-title {
   display: flex;
-  padding: 20px;
+  justify-content: flex-start;
+  height: 0.43556rem;
+  margin: 0.43889rem;
+  padding-left: 0.13889rem;
+  border-left: 0.12rem solid;
+  border-left-color: #f23030;
+  font-size:0.37rem;
+  font-weight: 600;
 }
-.bill-box-child-left {
+
+.drawer-goods-container {
+  padding-left: 0.23889rem;
+  max-height: 4rem;
+  overflow: scroll;
+  font-size:0.37rem;
+  margin-bottom: 0.43889rem;
+}
+ul {
+  list-style: none;
+}
+
+.drawer-goods-content:not(:last-child) {
+  border-bottom: dashed 0.02778rem #e8e8e8;
+}
+.drawer-goods-item {
+  display: flex;
+  flex-direction: row;
+  padding: 0.23889rem;
+}
+
+.goods-name {
   flex: 0.4;
   display: flex;
   justify-content: flex-start;
-  align-self: center;
+  font-size:0.37rem;
+  font-weight: 600;
 }
-.bill-box-child-middle {
+.goods-price {
   flex: 0.3;
+  font-size:0.37rem;
 }
-.bill-box-child-right {
-  flex: 0.3;
+.goods-process {
+  flex: 0.4;
+  font-size:0.37rem;
 }
-.box {
+
+.iconfont{
+  color: #f23030;
+}
+
+.shopping-car-layout {
   display: flex;
   width: 100%;
   height: 100%;
-  background: rgb(180, 206, 141);
 }
-.left {
+.shopping-car-layout-left {
   width: 50px;
-  height: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
+  color: #ff302f;
 }
-.middle {
+.icon-iconset0308 {
+  font-size: 1rem;
+}
+.shopping-car-layout-middle {
   flex: 1;
+  display: flex;
+  align-items: center;
+  font-size: 0.44444rem;
+  justify-content: center;
+  color: #ff302f;
 }
-.right {
-  width: 100px;
-  background: goldenrod;
+.shopping-car-layout-right {
+  width: 3.33333rem;
+  background: #ff302f;
+  color: white;
+  display: flex;
+  align-items: center;
+  font-size: 0.44444rem;
+  justify-content: center;
 }
 </style>

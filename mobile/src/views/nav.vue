@@ -12,36 +12,29 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import { getTpyeList, getMenuList } from "../api/index.js";
-
 import { useStore } from "vuex";
+import sessionFun from "../utils/sessionFun"
 export default defineComponent({
-  name:'Nav',
-  setup(props,{ emit }) {
+  name: "Nav",
+  setup(props, { emit }) {
     const store = useStore();
-    let typelist = ref(); //类型列表
+    // let typelist = ref(); //类型列表
     let box1 = ref(0); //设置高亮
 
-    onMounted(() => {
-      //获取菜单类型列表
-      getTpyeList().then((res) => {
-        console.log("getTpyeList", res);
-        if (res.err == false) {
-          typelist.value = res.list;
-          console.log("typelist upgrade", typelist.value);
-          emit("navEmit",typelist.value[0].type);
-          // getMenuList({ key: typelist.value[0].type }).then((res) => {
-           getMenuList().then((res) => {
-            store.commit("menuListChanged", {
-              list: res.list,
-            });
-          });
-        }
-      });
-    });
+     let typelist = computed(() => {
+       
+       if( store.state.typeList.length){
+         emit("navEmit", store.state.typeList[0].type);
+       }
+       return store.state.typeList
+     })
+    
+
+      
     const mouseclick = (index) => {
-      console.log("mouseclick", index, typelist.value[index].type);
+      
       //设置高亮
       box1.value = index;
 
@@ -51,8 +44,7 @@ export default defineComponent({
       //     list: res.list,
       //   });
       // });
-      emit("navEmit",typelist.value[index].type);
-
+      emit("navEmit", typelist.value[index].type);
     };
     return {
       typelist,
@@ -63,14 +55,26 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="less" scoped>
 /* 利用行高（line-height）让文字垂直居中 设置line-height和height的值一样*/
+
 .box {
-  height: 50px;
-  text-align: center;
-  line-height: 50px;
+  font-weight: 700;
+  font-size: 0.375rem;
+  height: 1.1rem;
+  vertical-align: middle;
+  line-height: 1.1rem;
+  box-sizing: border-box;
+  border-left: 0.18rem solid transparent;
+  cursor: pointer;
 }
 .box1 {
-  background: rgb(233, 129, 149);
+  // background: rgb(213, 227, 255);
+  border-left: 0.18rem solid;
+  border-left-color: #f23030;
+  color: #f23030;
+  background: #fff;
+  box-sizing: border-box;
+ 
 }
 </style>

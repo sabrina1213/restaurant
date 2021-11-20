@@ -1,13 +1,16 @@
 import axios from 'axios'
 
 const post = (url) => {
-    // let server = process.env.NODE_ENV ! == 'development' ? 'http://api.lccbjc.com' : ''
+    if(process.env.NODE_ENV !== 'development'&&process.env.NODE_ENV=='production'){
+        url = 'http://101.34.51.116:3000'+url;
+    }
     return (params) => {
         return new Promise((resolve, reject) => {
+          
             axios.post(url, { 
                 params
             }).then((res) => {
-                console.log(url, res, 'request.js')
+                // console.log(url, res, 'request.js')
                 const data = res.data
                 
                 if (data.err === false) {
