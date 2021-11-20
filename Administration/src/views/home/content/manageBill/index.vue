@@ -3,7 +3,7 @@
     <div v-if="isStatue">
       <Statue @statueEmit="commit" />
     </div>
-    <div v-if="isStatue == false">
+    <div v-if="!isStatue">
       <Detail :value="{ list: bill1, value: info }" />
     </div>
   </div>

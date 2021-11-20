@@ -7,10 +7,18 @@
       label-width="60px"
     >
       <el-form-item label="用户" prop="username">
-        <el-input v-model="ruleForm.phone" style="width: 300px" autocomplete="on"></el-input>
+        <el-input
+          v-model="ruleForm.phone"
+          style="width: 300px"
+          autocomplete="on"
+        ></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="ruleForm.password" style="width: 300px"></el-input>
+        <el-input
+          v-model="ruleForm.password"
+          style="width: 300px"
+          type="password"
+        ></el-input>
       </el-form-item>
       <div class="btn-box">
         <el-button
@@ -28,8 +36,6 @@
 import { getCurrentInstance, ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "../../api/index.js";
-
-
 
 export default {
   setup() {
@@ -59,13 +65,13 @@ export default {
           if (valid) {
             console.log(ruleForm);
             const { phone, password } = ruleForm;
-            
-            login({phone:phone,password:password}).then((res:any) => {
-              if(res.err === false){
-                ctx.$message.success('登录成功了~');
-                console.log("login.response",res);
-                router.push('/home/manageMenu');
-                
+
+            login({ phone: phone, password: password }, function (data: any) {
+              if (data.err === false) {
+                alert("登录成功了~");
+                console.log("login.response", data);
+                sessionStorage.setItem('isadmin','true');
+                router.push("/home/manageMenu");
               }
             });
           }

@@ -1,7 +1,9 @@
 <template>
   <div>
     <el-row class="add-row">
-      <el-button type="primary" @click="addmenu">新增 </el-button>
+      <el-button type="primary" @click="addDialogTableVisible = true"
+        >新增
+      </el-button>
       <el-dialog title="新增菜品" v-model="addDialogTableVisible">
         <el-row>
           <el-col :span="12" class="add-Dialog-left">
@@ -28,13 +30,13 @@
                   v-model="newMenuData.price"
                   autocomplete="off"
                 ></el-input>
-                </el-form-item>
-                <el-form-item label="单位" width="120">
+              </el-form-item>
+              <!-- <el-form-item label="单位" width="120">
                 <el-input
                   v-model="newMenuData.unit"
                   autocomplete="off"
                 ></el-input>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="类别" width="120">
                 <el-input
                   v-model="newMenuData.type"
@@ -52,10 +54,24 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12" class="cancel-button">
-            <el-button @click="cancelSubmit()"> 取消 </el-button>
+            <el-button
+              @click="
+                addDialogTableVisibl = false;
+                cancelSubmit();
+              "
+            >
+              取消
+            </el-button>
           </el-col>
           <el-col :span="12" class="submit-button">
-            <el-button @click="confirmSubmit()"> 提交 </el-button>
+            <el-button
+              @click="
+                addDialogTableVisibl = false;
+                confirmSubmit();
+              "
+            >
+              提交
+            </el-button>
           </el-col>
         </el-row>
       </el-dialog>
@@ -67,8 +83,7 @@ import {
   defineComponent,
   reactive,
   ref,
-  onMounted,
-  computed,
+  nextTick,
   getCurrentInstance,
 } from "vue";
 import { toRaw } from "@vue/reactivity";
@@ -79,24 +94,23 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const { ctx }: any = getCurrentInstance();
-    const addDialogTableVisible: any = ref(); //  新增菜单弹出框
+    let addDialogTableVisible = ref(false); //  新增菜单弹出框
     //新增菜单表单
-    const newMenuData = reactive({
+    let newMenuData = reactive({
       picture: "",
       name: "",
       price: "",
-      unit:'',
-      type:"",
+      type: "",
       detail: "",
     });
-    //菜单列表
-    
-    
-    
-    addDialogTableVisible.value = false;
+    let hasdown = ref(false);
+    let table = reactive({
+      showTable: true,
+    });
 
     // 弹出新增菜单框
     const addmenu = () => {
+      console.log("addDialogTableVisible", addDialogTableVisible);
       addDialogTableVisible.value = true;
     };
     let img: any = new Image();
@@ -132,34 +146,45 @@ export default defineComponent({
     //取消上传
     const cancelSubmit = () => {
       addDialogTableVisible.value = false;
-          
-
     };
     //确认上传
     const confirmSubmit = () => {
-      newMenuData.picture = img.src;
-        addMenu(newMenuData).then(function (res:any) {
-          console.log(res);
+      if (newMenuData.name && newMenuData.price && newMenuData.type) {
+        console.log("新增数", img.src, newMenuData);
+        newMenuData.picture = img.src;
+        addMenu(newMenuData, function (res: any) {
+          console.log("addMenu(newMenuData)", res);
           addDialogTableVisible.value = false;
-          
+
           if (res.err == false) {
-            ctx.$message.success("新增数据成功~");
-            // window.alert('新增数据成功~');
+            alert("新增数据成功~");
             newMenuData.picture = res.newPicUrl;
-            console.log ("newMenuData changed ",toRaw(newMenuData))
-            // let tableData = toRaw(store.state.menuList);
-            let tableData = store.state.menuList;
+            console.log("newMenuData changed ", toRaw(newMenuData), res);
+            let tableData = toRaw(store.state.menuList);
             store.commit("menuListChanged", {
-              list: [...tableData,...[toRaw(newMenuData)]]
-            }
-          
-            );
+              list: [...tableData, ...[toRaw(newMenuData)]],
+            });
+          } else {
+            alert("新增数据失败~");
           }
-          else{
-            ctx.$message.success("新增数据失败~");
-          }
-        })
+        });
+
+        img.src = "";
         
+        //使用刷新
+        table.showTable = false;
+        nextTick(() => {
+          //写入操作
+          table.showTable = true;
+          // newMenuData.picture = "";
+          // newMenuData.name = "";
+          // newMenuData.price = "";
+          // newMenuData.detail = "";
+          // newMenuData.type = "";
+        });
+      } else {
+        alert("信息不完整");
+      }
     };
 
     return {

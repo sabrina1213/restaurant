@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bill-detial">
       桌号:{{bill.table_number}}订单号:{{bill.bill_number}}下单时间:{{bill.submission_time}}金额:{{bill.total_price}}
       <el-table :data="billList" border >
         <el-table-column prop="goods_name" label="菜名" width="200">
@@ -16,7 +16,7 @@ import { computed } from '@vue/runtime-core'
 export default {
     props:{
         value:Object,
-        // list:Object
+        
     },
     setup(props){
         
@@ -37,4 +37,10 @@ export default {
 
 <style>
 
+.el-table--border {
+    border-right: none;
+    border-bottom: none;
+    width: 500px;
+    margin-top: 30px;
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-table :data="billData" border style="width:100%">
+      <el-table :data="billData" border style="width: 100%">
         <el-table-column prop="bill_number" label="订单号" width="200">
         </el-table-column>
         <el-table-column prop="table_number" label="桌号" width="200">
@@ -10,8 +10,8 @@
         </el-table-column>
         <el-table-column prop="submission_time" label="下单时间" width="200">
         </el-table-column>
-        
-        <el-table-column label="操作" fixed="right" width="150">
+
+        <el-table-column label="操作" fixed="right">
           <template #default="scope">
             <el-button
               type="text"
@@ -33,24 +33,24 @@ import { reactive, ref ,toRaw} from "@vue/reactivity";
 import {searchBill,searchBillDetail} from "@/api/index.js"
 export default defineComponent({
   setup(props,{ emit }) {
-      let billData = reactive([]);
-      // let billDetailList = reactive([{}]);
+      let billData = ref();
       let billDetailList = []
       onMounted(()=>{
-          searchBill().then((res)=>{
-              if(res.err == false){
-                res.list.forEach(element => {
-                    billData.push(element);
-                });
-              }
-          })
-      });
-      const showdetail = (index,value)=>{
-          searchBillDetail({key:value.bill_number}).then((res)=>{
-            if(res.err == false){
-              billDetailList = res.list;
+          searchBill({},function(data){
+            if(data.err == false){
+              console.log('searchbill',data);
+              billData.value = data.list;
+            }
+          }
+      )});
+      const showdetail = (value,detial)=>{
+       
+          searchBillDetail({key:detial.bill_number},function(data){
+            if(data.err == false){
+              billDetailList = data.list;
+             
               emit('statueEmit',{
-                billInfo:value,
+                billInfo:detial,
                 billList:billDetailList
               });
             }
@@ -60,7 +60,8 @@ export default defineComponent({
           billData,
           showdetail 
       }
-  },
-});
+      }
+  
+})    
 </script>
 

@@ -1,6 +1,9 @@
 <template>
-  <el-row>
-  <el-row style="width:100%;height:50px;background:pink;margin-bottom:10px;">妖精的店铺管理 </el-row>
+  <el-row class="main-box">
+    <el-row
+      class="title"
+      >妖精的店铺
+    </el-row>
     <div class="box">
       <div class="nav">
         <Nav />
@@ -22,14 +25,32 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.box{
+.main-box{
+  /* margin: 0 50px; */
+  overflow: auto;
+}
+.title{
+    width: 100%;
+    height: 100px;
+    background: #729dc996;
+    margin-bottom: 10px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: larger;
+}
+.box {
   display: flex;
+  width: 100%;
 }
-.nav{
-  width: 200px;
+.nav {
+  width: 130px;
 }
-.content{
+.content {
   flex: 1;
+  padding: 10px;
+  overflow: auto;
 }
 </style>
 

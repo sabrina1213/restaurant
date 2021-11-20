@@ -10,7 +10,7 @@
         >
       </el-col>
     </el-row>
-    <div id="qrcode" style="height:300px;width:300px;background:wite;"></div>
+    <div id="qrcode" class="qrcode"></div>
   </div>
 </template>
 
@@ -22,7 +22,12 @@ export default defineComponent({
     let input = ref("");
     const createQRcode = () => {
       console.log(input.value);
-      new QRCode(document.getElementById("qrcode"), "http://localhost:8081/?desk="+input.value);  // 设置要生成二维码的链接
+      if(process.env.NODE_ENV !== 'development'&&process.env.NODE_ENV=='production'){
+        new QRCode(document.getElementById("qrcode"), "http://101.34.51.116/mobile/#/menu/detial?desk="+input.value);  // 设置要生成二维码的链接
+      }
+      else{
+        new QRCode(document.getElementById("qrcode"), "http://localhost:8081/menu/detial?desk="+input.value);  // 设置要生成二维码的链接
+      }
 
     };
     return {
@@ -34,4 +39,11 @@ export default defineComponent({
 </script>
 
 <style>
+.qrcode{
+height:300px;
+width:300px;
+background:white;
+margin: auto;
+padding-top: 30px;
+}
 </style>
