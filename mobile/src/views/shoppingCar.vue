@@ -47,6 +47,24 @@
       <div class="shopping-car-layout-middle">¥ {{ totalPrice }}</div>
       <div class="shopping-car-layout-right" @click="toEnsureBill">去下单</div>
     </div>
+    <!-- <dialog :message="dialogMessage" :isshow="isdialogshow"></dialog> -->
+
+    <div >
+      <div :class="{diamask:true, diamaskShow: isdialogshow, diamaskHide: !isdialogshow }"></div>
+      <div  :class="{ dialogBox: true, dialogBoxShow: isdialogshow, dialogBoxHide: !isdialogshow }">
+        <div class="dialog-info">
+          <span>{{dialogMessage}}</span>
+        </div>
+        <div class="button-com">
+          <div class="button-cancle" @click="cancleUpload">
+            取消
+          </div>
+          <div class="button-confirm" @click="Upload">
+            确定
+          </div>
+        </div>
+      </div>
+  </div>
   </div>
 </template>
 
@@ -89,7 +107,15 @@ export default {
       if (billList.value.length > 0) {
         isshow.value = true;
       } else {
-        alert("请添加商品");
+       const toast = Toast({
+          value: "请添加商品",
+          duration: 0, // 如果大于0则不必使用destory方法
+          background: "#303030ad",
+          color: "#fff",
+        });
+        setTimeout(() => {
+          toast.destory && toast.destory();
+        }, 3000);
       }
 
       // emit("carEmit", isshow.value);
@@ -97,7 +123,6 @@ export default {
 
     //关闭账单框
     const closeByMask = () => {
-      console.log("close-----car ---detial");
       isshow.value = false;
     };
 
@@ -127,10 +152,14 @@ export default {
       });
     };
 
-    //跳转到账单页面
-    const toEnsureBill = () => {
-      if (billList.value.length > 0) {
-        console.log("postBillList---------", billList);
+    let dialogMessage = ref('确认下单吗？');
+    let isdialogshow = ref(false);
+    const cancleUpload = ()=>{
+      isdialogshow.value  = false;
+    }
+    const Upload = ()=>{
+      isdialogshow.value  = false;
+      console.log("postBillList---------", billList);
         sessionStorage.setItem("isEnsureBill", "true");
         var params = window.location.hash;
     
@@ -155,6 +184,11 @@ export default {
             });
           }
         });
+    }
+    //跳转到账单页面
+    const toEnsureBill = () => {
+      if (billList.value.length > 0) {
+        isdialogshow.value = true;
       } else {
          const toast = Toast({
           value: "请添加商品",
@@ -170,7 +204,8 @@ export default {
     };
 
     return {
-   
+      isdialogshow,
+      dialogMessage,
       totalPrice,
       isshow,
       billList,
@@ -179,6 +214,8 @@ export default {
       toEnsureBill,
       numSub,
       numAdd,
+      cancleUpload,
+      Upload
 
     };
   },
@@ -199,10 +236,10 @@ export default {
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 1;
-  /* transition: all 5s ease 0s; */
+
 }
 .maskHide {
-  /* opacity: 0; */
+ 
   transition: 0.5s;
   display: none;
 }
@@ -212,6 +249,7 @@ export default {
   bottom: 0;
   width: 100%;
   background: #fff;
+  max-width: 750px;
   /* transition: all 0.5s; */
   /* transition: all 5s ease 0s; */
 }
@@ -306,5 +344,67 @@ ul {
   align-items: center;
   font-size: 0.44444rem;
   justify-content: center;
+}
+
+
+.diamask{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.diamaskShow {
+  opacity: 1;
+}
+.diamaskHide {
+  display: none;
+}
+.dialogBox {
+  position: fixed;
+  z-index: 10;
+  top: 50%;
+    width: 45%;
+    height: 3.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+  background: #fff;
+  max-width: 750px;
+  display: flex;
+  flex-direction: column;
+}
+.dialogBoxShow {
+  opacity: 1;
+}
+.dialogBoxHide {
+ 
+  display: none;
+}
+.dialog-info{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.button-com{
+  height: 1rem;
+  display: flex;
+  flex-direction: row;
+}
+.button-cancle{
+  flex: 1;
+  cursor: pointer;
+}
+.button-confirm{
+  flex: 1;
+  cursor: pointer;
+}
+.button-cancle:hover{
+  color: blue;
+}
+.button-confirm:hover{
+  color: blue;
 }
 </style>

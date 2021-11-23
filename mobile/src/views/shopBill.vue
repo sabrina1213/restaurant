@@ -52,8 +52,6 @@ export default {
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
-    // let billNumber = route.query.billNumber; //订单编号
-    // let submissionTime = route.query.submissionTime; //下单时间
     let billNumber = sessionStorage.getItem("billNumber");
     let submissionTime = sessionStorage.getItem("submissionTime");
     //filter筛选menulist生成购物车列表
@@ -119,7 +117,7 @@ export default {
   /* width: 100%; */
   border-bottom: 1px solid rgb(202, 202, 202);
   display: flex;
-  height: 55px;
+  height: 1.5rem;
   padding: 5px;
 }
 .bill-list-child-img {
