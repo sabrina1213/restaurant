@@ -1,9 +1,7 @@
 <template>
   <div>
     <el-row class="add-row">
-      <el-button type="primary" @click="addDialogTableVisible = true"
-        >新增
-      </el-button>
+      <el-button type="primary" @click="addmenu">新增 </el-button>
       <el-dialog title="新增菜品" v-model="addDialogTableVisible">
         <el-row>
           <el-col :span="12" class="add-Dialog-left">
@@ -31,12 +29,6 @@
                   autocomplete="off"
                 ></el-input>
               </el-form-item>
-              <!-- <el-form-item label="单位" width="120">
-                <el-input
-                  v-model="newMenuData.unit"
-                  autocomplete="off"
-                ></el-input>
-              </el-form-item> -->
               <el-form-item label="类别" width="120">
                 <el-input
                   v-model="newMenuData.type"
@@ -79,21 +71,17 @@
   </div>
 </template>
 <script lang='ts'>
-import {
-  defineComponent,
-  reactive,
-  ref,
-  nextTick,
-  getCurrentInstance,
-} from "vue";
+import { defineComponent, reactive, ref, getCurrentInstance } from "vue";
 import { toRaw } from "@vue/reactivity";
 import { useStore } from "vuex";
 import { addMenu } from "@/api/index.js";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   setup() {
     const store = useStore();
-    const { ctx }: any = getCurrentInstance();
+     const router = useRouter();
+
     let addDialogTableVisible = ref(false); //  新增菜单弹出框
     //新增菜单表单
     let newMenuData = reactive({
@@ -103,17 +91,24 @@ export default defineComponent({
       type: "",
       detail: "",
     });
-    let hasdown = ref(false);
-    let table = reactive({
-      showTable: true,
-    });
+    let img: any = new Image();
 
     // 弹出新增菜单框
     const addmenu = () => {
-      console.log("addDialogTableVisible", addDialogTableVisible);
+      newMenuData.name = "";
+      newMenuData.price = "";
+      newMenuData.type = "";
+      newMenuData.detail = "";
+      img.src = '';
+      if(document.getElementById("imgPreview")){
+         let  imgbox: any = document.querySelector(".add-Dialog-left-box");
+            let imgPreview = document.getElementById("imgPreview");
+            console.log(imgPreview);
+            imgbox.removeChild(imgPreview);
+      }     
       addDialogTableVisible.value = true;
     };
-    let img: any = new Image();
+
     //上传图片
     const uploadImage = () => {
       console.log("上传图片");
@@ -136,10 +131,15 @@ export default defineComponent({
         img.src = e.target.result;
         // 使本地图片在浏览器中预览
         var imgbox: any = document.querySelector(".add-Dialog-left-box");
-        imgbox.innerHTML =
-          '<img style="height:202px;width:202px" src="' +
-          e.target.result +
-          '">';
+        // imgbox.innerHTML =
+          // '<img style="height:202px;width:202px" id="imgPreview" src="' +
+          // img.src +
+          // '">';
+          var imgPreview = document.createElement("img");
+         imgPreview.setAttribute('id','imgPreview');
+         imgPreview.setAttribute('src',img.src);
+         imgPreview.setAttribute('style',"height:202px;width:202px;z-index: 10;position: absolute;");
+         imgbox.appendChild(imgPreview);
       };
     };
 
@@ -164,23 +164,10 @@ export default defineComponent({
             store.commit("menuListChanged", {
               list: [...tableData, ...[toRaw(newMenuData)]],
             });
+            router.go(0);
           } else {
             alert("新增数据失败~");
           }
-        });
-
-        img.src = "";
-        
-        //使用刷新
-        table.showTable = false;
-        nextTick(() => {
-          //写入操作
-          table.showTable = true;
-          // newMenuData.picture = "";
-          // newMenuData.name = "";
-          // newMenuData.price = "";
-          // newMenuData.detail = "";
-          // newMenuData.type = "";
         });
       } else {
         alert("信息不完整");
@@ -215,6 +202,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   border: 1px dashed rgb(187, 182, 182);
+  position :absolute;
 }
 .add-Dialog-left-box:hover {
   border: 1px dashed #73b8fdfa;
@@ -230,5 +218,11 @@ export default defineComponent({
   height: 40px;
   position: absolute;
   opacity: 0;
+}
+#imgPreview{
+  height:202px;
+  width:202px;
+  z-index: 10;
+  
 }
 </style>

@@ -36,7 +36,7 @@
 import { getCurrentInstance, ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "../../api/index.js";
-
+import { reg_tel_phone } from '@/utils/regex.js'
 export default {
   setup() {
     const router = useRouter();
@@ -51,7 +51,7 @@ export default {
     const rules = {
       phone: [
         { required: true, message: "请输入手机号", trigger: "blur" },
-        { min: 11, max: 11, message: "请输入正确的手机号", trigger: "blur" },
+        {pattern:reg_tel_phone, min: 6, max: 20,message: "请输入正确的手机号", trigger: "blur" },
       ],
       password: [
         { required: true, message: "请输入密码", trigger: "blur" },
